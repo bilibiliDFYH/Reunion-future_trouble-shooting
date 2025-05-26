@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://omlfe0kvax34"]
+
+[ext_resource type="Texture2D" uid="uid://chqhn4d6lbdat" path="res://黑色背景.png" id="1_i8ux6"]
+[ext_resource type="Script" uid="uid://dywukfr2mxhui" path="res://代码/ui主要代码.gd" id="2_n48ex"]
+
+[node name="场景" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="黑色背景" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = -1920.0
+offset_top = -1080.0
+offset_right = 3200.0
+offset_bottom = 1800.0
+texture = ExtResource("1_i8ux6")
+
+[node name="UI" type="TextureRect" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+expand_mode = 1
+script = ExtResource("2_n48ex")
