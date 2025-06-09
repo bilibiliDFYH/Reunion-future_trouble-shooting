@@ -225,7 +225,7 @@ func 创建子UI (按钮ini名称 : String ,UI类型 : String):
 
 	if UI类型 == "SelectBox" :
 
-		复制的UI.set_script (load ("res://代码/UI_列表代码.gd") )						#挂载代码
+		复制的UI.set_script (load ("res://代码/UI_列表代码.gd") )					#挂载代码
 		#复制的UI.texture=load("res://loadingscreen1.png")
 		复制的UI.position=Vector2(-1280,-1280)
 		复制的UI.scale = Vector2(-1,-1)
