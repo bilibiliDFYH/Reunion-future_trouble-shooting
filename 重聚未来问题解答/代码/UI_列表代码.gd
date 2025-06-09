@@ -21,6 +21,9 @@ var 当前选择的选项 = 0
 var 当前选择的选项_2 = 0
 var 最大项目数 = -1
 #————————————————————————————————#————————————————————————————————#—————————————#
+var 索引列表物体_node
+var 索引列表选中选项_int = 0
+#————————————————————————————————#————————————————————————————————#—————————————#
 var 数据是否读取完成 = false
 var UI类型_string
 var ListINI
@@ -285,7 +288,7 @@ func 设置UI ():
 		if ini数据[i].find ("MaxItem=") != -1 :										#如果有"Size="
 			最大项目数 = int (当前行数_内容_string)
 
-	call_deferred ("创建可选选项")
+	call_deferred ("创建可选选项_数据处理")
 	gui_input.connect(被左键点击)
 
 	#if UI类型_string == "SelectBox" :
@@ -294,37 +297,72 @@ func 设置UI ():
 #————————————————————————————————#————————————————————————————————#—————————————#
 
 #————————————————————————————————#————————————————————————————————#—————————————#
-func 创建可选选项 ():
-	var 临时int1_int = 列表选择框的数据[0].substr (列表选择框的数据[0].find (";") + 1 , 列表选择框的数据[0].find (":") - 列表选择框的数据[0].find (";") - 1)
-	var 临时int1_int_c = 列表选择框的数据[0].substr (列表选择框的数据[0].find (";") + 1 , 列表选择框的数据[0].find (":") - 列表选择框的数据[0].find (";") - 1)
+func 创建可选选项_数据处理 ():
+	var 要生成的选项数据_list = []
+
+	var 生成的选项数 = 0
+	for 循环次数 in 列表选择框的数据.size () :
+		var 当前行数据_string = 列表选择框的数据[循环次数]
+		if UI类型_string == "List" :
+			if 最大项目数 != -1 && 生成的选项数 == 最大项目数:
+				break
+			var 索引 = 当前行数据_string.substr (当前行数据_string.find (">") + 1)
+			索引 = int (索引)
+			if 索引 == 索引列表选中选项_int :
+				要生成的选项数据_list.append (当前行数据_string.substr (0 , 当前行数据_string.find (">")))
+				生成的选项数 = 生成的选项数 + 1
+		if UI类型_string == "SelectBox" :
+			if 最大项目数 != -1 && 生成的选项数 == 最大项目数:
+				break
+			要生成的选项数据_list.append (当前行数据_string)
+			生成的选项数 = 生成的选项数 + 1
+
 	var 复制的UI
 	var 多行文本的父级物体
-	for a in 列表选择框的数据.size () :
-		if 最大项目数 != -1 && a == 最大项目数:
-			break
-		临时int1_int = 列表选择框的数据[a].substr (列表选择框的数据[a].find (";") + 1 , 列表选择框的数据[a].find (":") - 列表选择框的数据[0].find (";") - 1)
-		var 复制的UI_选项类型 = 列表选择框的数据[a].substr (列表选择框的数据[a].find (":") + 1 , 列表选择框的数据[a].find (">") - 列表选择框的数据[a].find (":") - 1 )
-		var 复制的UI_索引 = 列表选择框的数据[a].substr (列表选择框的数据[a].find (">") + 1)
-		复制的UI = TextureRect.new()											#创建UI
-		复制的UI.name = str (a)													#设置名称
+
+	var 当前生成的选项 = 要生成的选项数据_list[0]
+	var 文本贴图_string = 当前生成的选项.substr (0 , 当前生成的选项.find (";") )
+	var 编号_int = 当前生成的选项.substr (当前生成的选项.find (";") + 1 , 当前生成的选项.find (":") - 当前生成的选项.find (";") - 1 )
+	编号_int = int(编号_int)
+	var 类型_string = 当前生成的选项.substr (当前生成的选项.find (":") + 1)
+	var 编号_int_上一个 = 编号_int
+
+	for 生成的第n个选项 in 生成的选项数 :
+		当前生成的选项 = 要生成的选项数据_list[生成的第n个选项]
+		文本贴图_string = 当前生成的选项.substr (0 , 当前生成的选项.find (";") )
+		编号_int = 当前生成的选项.substr (当前生成的选项.find (";") + 1 , 当前生成的选项.find (":") - 当前生成的选项.find (";") - 1 )
+		编号_int = int(编号_int)
+		类型_string = 当前生成的选项.substr (当前生成的选项.find (":") + 1)
+		if true :
+			print("<<<<<<<<")
+			print(文本贴图_string)
+			print(编号_int)
+			print(类型_string)
+			print(">>>>>>>>\n")
+		复制的UI = TextureRect.new()												#创建UI
+		复制的UI.name = str (编号_int)										#设置名称
 		复制的UI.set_script (load ("res://代码/UI_按钮代码.gd") )					#挂载代码
 		if UI类型_string == "SelectBox" :
-			复制的UI.UI类型_string = "SltBoxBtn"										#设置UI类型
+			复制的UI.UI类型_string = "SltBoxBtn"									#设置UI类型
+			复制的UI.被点击效果.append ("Options:" + str(编号_int) )
 		if UI类型_string == "List" :
-			if 复制的UI_选项类型 == "Text" :
-				复制的UI.UI类型_string = "ListBoxBtn_Text"										#设置UI类型
-			else :
-				复制的UI.UI类型_string = "ListBoxBtn"										#设置UI类型
+			if 类型_string == "Text" :
+				复制的UI.UI类型_string = "ListBoxBtn_Text"						#设置UI类型
+			elif 类型_string == "Optional" :
+				复制的UI.UI类型_string = "ListBoxBtn"
+				复制的UI.被点击效果.append ("Options:" + str(编号_int) )
+		
+		复制的UI.物体编号_int = int(编号_int)										#设置编号
 
-		复制的UI.position = Vector2 ( 0 , 大小.y * a )
-		if 列表选择框的数据.size () == 1 || 最大项目数 == 1 :
+		复制的UI.position = Vector2 ( 0 , 大小.y * 生成的第n个选项 )
+		if 生成的选项数 == 1:
 			复制的UI.UI贴图_原本的贴图 = 下拉栏选择框贴图只有一个
 			复制的UI.UI贴图_被触碰的贴图 = 下拉栏选择框贴图只有一个_c
 		else :
-			if a == 0 :
+			if 生成的第n个选项 == 0 :
 				复制的UI.UI贴图_原本的贴图 = 下拉栏选择框贴图上
 				复制的UI.UI贴图_被触碰的贴图 = 下拉栏选择框贴图上_c
-			elif a == 列表选择框的数据.size () - 1 || a == 最大项目数 - 1 :
+			elif 生成的第n个选项 == 生成的选项数 - 1:
 				复制的UI.UI贴图_原本的贴图 = 下拉栏选择框贴图下
 				复制的UI.UI贴图_被触碰的贴图 = 下拉栏选择框贴图下_c
 			else :
@@ -332,17 +370,14 @@ func 创建可选选项 ():
 				复制的UI.UI贴图_被触碰的贴图 = 下拉栏选择框贴图中_c
 
 		复制的UI.size = 大小
-		var 文件路径 = OS.get_executable_path().get_base_dir() + 列表选择框的数据[a].substr (0 , 列表选择框的数据[a].find (";"))
-																				#获取文件路径
+		var 文件路径 = OS.get_executable_path().get_base_dir() + 文本贴图_string
 		var image  = Image.new()												#创建image
 		image.load (文件路径)														#读取贴图
-		var texture = ImageTexture.create_from_image(image)						#将image设置为texture
-		复制的UI.UI贴图_文本_原本的贴图 = texture
-		复制的UI.UI贴图_文本_被触碰的贴图 = texture
-		复制的UI.被点击效果.append ("Options:" + str(临时int1_int) )
-		复制的UI.物体编号_int = int(临时int1_int)										#设置编号
+		var 文本贴图_texture = ImageTexture.create_from_image(image)						#将image设置为texture
+		复制的UI.UI贴图_文本_原本的贴图 = 文本贴图_texture
+		复制的UI.UI贴图_文本_被触碰的贴图 = 文本贴图_texture
 
-		if a != 0 && 临时int1_int == 临时int1_int_c :
+		if 生成的第n个选项 != 0 && 编号_int == 编号_int_上一个 :
 			if UI类型_string == "SelectBox" :
 				复制的UI.本体 = 多行文本的父级物体
 			if UI类型_string == "List" :
@@ -352,7 +387,7 @@ func 创建可选选项 ():
 
 		self.size = Vector2 (大小.x , 大小.y * 列表选择框的数据.size () )
 
-		if a != 0 && 临时int1_int == 临时int1_int_c :
+		if 生成的第n个选项 != 0 && 编号_int == 编号_int_上一个 :
 			多行文本的父级物体.add_child (复制的UI)									#实例化物体
 			复制的UI.position = Vector2 ( 0 , 大小.y)
 		else :
@@ -360,7 +395,7 @@ func 创建可选选项 ():
 
 		复制的UI.数据是否读取完成 = true											#允许运行这个UI
 
-		if 临时int1_int != 临时int1_int_c :
+		if 编号_int != 编号_int_上一个 :
 			多行文本的父级物体 = 复制的UI
 
 		所有选项物体_node.append (复制的UI)
@@ -368,7 +403,7 @@ func 创建可选选项 ():
 		if UI类型_string == "SelectBox" :
 			本体.文本.texture = 选项贴图 [当前选择的选项]
 
-		临时int1_int_c = 列表选择框的数据[a].substr (列表选择框的数据[a].find (";") + 1 , 列表选择框的数据[a].find (":") - 列表选择框的数据[0].find (";") - 1)
+		编号_int_上一个 = 编号_int
 #————————————————————————————————#————————————————————————————————#—————————————#
 
 #————————————————————————————————#————————————————————————————————#—————————————#
