@@ -1,2 +1,2 @@
-重聚未来问题解决
-Reunion future trouble shooting
+重聚未来问题解决/Reunion future trouble shooting
+一个简易程序，制作理由是因为有很多人游玩重聚未来时出问题不知道如何解决
