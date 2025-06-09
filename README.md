@@ -27,3 +27,4 @@ win系统直接运行生成好的exe就可以了，其他系统自己看是用�
 本作者——**东方银狐**的bilibili主页链接：https://space.bilibili.com/3493089798785418  
 本作者——**东方银狐**的红警社区主页链接：https://www.ra2.net/u/%E4%B8%9C%E6%96%B9%E9%93%B6%E7%8B%90/  
 本作者——**东方银狐**的红警diy主页链接：https://bbs.ra2diy.com/home.php?mod=space&uid=24454  
+贴图素材来源：《命令与征服：红色警戒2》和自己绘制
