@@ -104,9 +104,10 @@ func 设置UI ():
 					image.load( 文件路径)												#读取贴图
 					var texture = ImageTexture.create_from_image(image)				#将image设置为texture
 					UI贴图_文本_原本的贴图 = texture									#保存贴图文件到变量
-					文本 = TextureRect.new()
+					if 文本 == null :
+						文本 = TextureRect.new()
+						add_child (文本)
 					文本.name = "文本"
-					add_child (文本)
 					文本.size = self.size
 					文本.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 					文本.texture = UI贴图_文本_原本的贴图
@@ -132,10 +133,10 @@ func 设置UI ():
 				if ini数据[i].find ("SltBox=") != -1 :								#如果有"SelectBox="
 																					#(创建SelectBox)
 					call_deferred ("创建子UI" , 当前行数_内容_string , "SelectBox" )
-					pass
-				文本 = TextureRect.new()
+				if 文本 == null :
+					文本 = TextureRect.new()
+					add_child (文本)
 				文本.name = "文本"
-				add_child (文本)
 				文本.size = self.size
 				文本.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
@@ -153,9 +154,10 @@ func 设置UI ():
 		gui_input.connect(被左键点击)
 
 	if UI类型_string == "SltBoxBtn" || UI类型_string == "ListBoxBtn" || UI类型_string == "ListBoxBtn_Text" :
-		文本 = TextureRect.new()
+		if 文本 == null :
+			文本 = TextureRect.new()
+			add_child (文本)
 		文本.name = "文本"
-		add_child (文本)
 		文本.size = self.size
 		文本.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		文本.texture = UI贴图_文本_原本的贴图
@@ -208,6 +210,8 @@ func 鼠标移开 ():
 #————————————————————————————————#————————————————————————————————#—————————————#
 func 删除UI ():
 	queue_free()
+	if 文本 != null :
+		文本.queue_free()
 #————————————————————————————————#————————————————————————————————#—————————————#
 
 
